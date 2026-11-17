@@ -104,6 +104,27 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
+
+/* ---- pay assistant ---- */
+.chat{display:flex;flex-direction:column;gap:14px}
+.chat-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.chat-head h2{margin:0}
+.badge{font-family:var(--mono);font-size:11px;color:var(--ink-3);border:1px solid var(--line);border-radius:99px;padding:4px 10px;white-space:nowrap}
+.msgs{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto;padding-right:4px}
+.msg{max-width:85%;padding:11px 14px;border-radius:12px;font-size:15px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.msg.user{align-self:flex-end;background:var(--green);color:#0E100E;border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:var(--soft);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.bot b{color:var(--ink)}
+.msg.err{border-color:#7a3b2a;color:#F2B8A6}
+.typing span{display:inline-block;width:6px;height:6px;margin-right:4px;border-radius:50%;background:var(--ink-3);animation:blink 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.ask{display:flex;gap:8px}
+.ask input{flex:1;min-width:0;background:#0B0D0B;border:1px solid var(--line);border-radius:10px;color:var(--ink);font:500 15px var(--sans);padding:12px 14px;outline:none}
+.ask input:focus{border-color:var(--green)}
+.ask .btn{flex:none}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
 @media (max-width:820px){
   .grid,.cols{grid-template-columns:1fr}
   .top nav a:not(:last-child){display:none}
@@ -121,7 +142,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color
 <div class="wrap">
   <header class="top">
     <a class="brand" href="./"><span class="dot"></span>zm-pay / 2026</a>
-    <nav><a href="#working">How it's worked out</a><a href="#sources">Sources</a><a href="https://roykamwanza.github.io" target="_blank" rel="noopener">By Roy</a></nav>
+    <nav><a href="#ask">Ask</a><a href="#working">How it's worked out</a><a href="#sources">Sources</a><a href="https://roykamwanza.github.io" target="_blank" rel="noopener">By Roy</a></nav>
   </header>
 
   <section class="hero">
@@ -178,6 +199,31 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color
       </div>
     </section>
   </main>
+
+  <section class="section" id="ask">
+    <div class="card chat">
+      <div class="chat-head">
+        <div>
+          <h2>Ask about your pay</h2>
+          <p class="intro" style="margin:4px 0 0">Questions about your PAYE, NAPSA, NHIMA or a raise. It uses the numbers above.</p>
+        </div>
+        <span class="badge">AI · Gemini</span>
+      </div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="chips" id="qchips">
+        <button type="button" class="chip q">Why is my PAYE this amount?</button>
+        <button type="button" class="chip q">What if I get a K2,000 raise?</button>
+        <button type="button" class="chip q">Is housing allowance taxed?</button>
+        <button type="button" class="chip q">What does my employer pay?</button>
+      </div>
+      <form class="ask" id="askform" autocomplete="off">
+        <label for="q" class="sr">Your question</label>
+        <input id="q" maxlength="400" placeholder="Ask a question about your pay">
+        <button class="btn" id="send" type="submit">Ask</button>
+      </form>
+      <p class="note" style="margin:0">AI answers can be wrong. This explains pay rules; it isn't financial or tax advice. Don't type personal details.</p>
+    </div>
+  </section>
 
   <section class="section" id="working">
     <h2>How it's worked out</h2>
@@ -275,6 +321,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color
   // ---- state ----
   var DEFAULT = { mode: "gross", period: "m", main: 10000, allow: 0 };
   var state = Object.assign({}, DEFAULT);
+  var last = null;
 
   var $ = function (id) { return document.getElementById(id); };
   var mainIn = $("main"), allowIn = $("allow");
@@ -313,6 +360,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color
     var mainM = state.main / k;
     var basicM = state.mode === "gross" ? mainM : solveBasic(mainM, allowM);
     var r = calc(basicM, allowM);
+    last = r;
 
     document.querySelectorAll("[data-mode]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.mode === state.mode); });
     document.querySelectorAll("[data-period]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.period === state.period); });
@@ -426,7 +474,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color
       state.main = Math.round(state.main * f * 100) / 100;
       state.allow = Math.round(state.allow * f * 100) / 100;
       state.period = t.dataset.period; syncInputs(); render();
-    } else if (t.classList.contains("chip")) {
+    } else if (t.classList.contains("chip") && !t.classList.contains("q")) {
       state.main = parseFloat(t.dataset.v); syncInputs(); render();
     } else if (t.id === "reset") {
       state = Object.assign({}, DEFAULT); syncInputs(); render();
@@ -449,6 +497,62 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color
       ta.remove();
     }
   }
+
+
+  // ---- pay assistant ----
+  var chat = [];               // {role:'user'|'model', text}
+  var busy = false;
+  var msgsEl = $("msgs"), qIn = $("q"), sendBtn = $("send");
+
+  function esc(t) { return t.replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function md(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/^\s*[-*] /gm, "• "); }
+  function addMsg(role, text, cls) {
+    var d = document.createElement("div");
+    d.className = "msg " + (role === "user" ? "user" : "bot") + (cls ? " " + cls : "");
+    d.innerHTML = role === "user" ? esc(text) : md(text);
+    msgsEl.appendChild(d); msgsEl.scrollTop = msgsEl.scrollHeight;
+    return d;
+  }
+  function payContext() {
+    var r = last, round = function (n) { return Math.round(n * 100) / 100; };
+    return {
+      basic: round(r.basic), allowances: round(r.allow), gross: round(r.gross),
+      paye: round(r.paye), napsa: round(r.napsa), nhima: round(r.nhima), net: round(r.net),
+      napsaCapped: r.capped,
+      bands: r.bands.map(function (b) { return { from: b.from, to: b.to === Infinity ? null : b.to, rate: b.rate, taxed: round(b.taxed), tax: round(b.tax) }; }),
+      raise1000Net: round(calc(r.basic + 1000, r.allow).net - r.net),
+      raise2000Net: round(calc(r.basic + 2000, r.allow).net - r.net)
+    };
+  }
+  function ask(text) {
+    text = (text || "").trim().slice(0, 400);
+    if (!text || busy) return;
+    busy = true; sendBtn.disabled = true; qIn.value = "";
+    $("qchips").style.display = "none";
+    addMsg("user", text);
+    chat.push({ role: "user", text: text });
+    var t = addMsg("model", ""); t.classList.add("typing"); t.innerHTML = "<span></span><span></span><span></span>";
+    fetch("/api/chat", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: chat.slice(-10), pay: payContext() })
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (j) { return { ok: res.ok, j: j }; });
+    }).then(function (o) {
+      t.classList.remove("typing");
+      if (o.ok && o.j.reply) {
+        t.innerHTML = md(o.j.reply); chat.push({ role: "model", text: o.j.reply });
+      } else {
+        t.classList.add("err"); t.textContent = o.j.error || "Sorry, the assistant isn't available right now. Try again in a minute.";
+        chat.pop();
+      }
+    }).catch(function () {
+      t.classList.remove("typing"); t.classList.add("err");
+      t.textContent = "Couldn't reach the assistant. Check your connection and try again."; chat.pop();
+    }).then(function () { busy = false; sendBtn.disabled = false; msgsEl.scrollTop = msgsEl.scrollHeight; });
+  }
+  $("askform").addEventListener("submit", function (e) { e.preventDefault(); ask(qIn.value); });
+  document.querySelectorAll(".chip.q").forEach(function (b) { b.addEventListener("click", function () { ask(b.textContent); }); });
+  addMsg("model", "Hi! Ask me anything about the pay result above: why PAYE is what it is, what a raise would leave you with, or how NAPSA and NHIMA work.");
 
   readURL(); syncInputs(); render();
 })();

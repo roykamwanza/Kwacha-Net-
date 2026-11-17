@@ -2,7 +2,7 @@
 
 Work out your take-home pay in Zambia: **PAYE, NAPSA and NHIMA, shown band by band.**
 
-**Live site:** https://roykamwanza.github.io/zambia-take-home-pay/
+**Live site:** https://zambia-take-home-pay.vercel.app
 
 ## What it does
 
@@ -12,7 +12,8 @@ Work out your take-home pay in Zambia: **PAYE, NAPSA and NHIMA, shown band by ba
 - **Shows its working:** a band-by-band PAYE table, every step from gross to take-home, and what the employer pays on top.
 - **Raise insight:** how much of your next K1,000 a month you would actually keep.
 - **Shareable links:** every result has its own URL, e.g. `/?mode=gross&amount=15000&allow=3000&period=m`.
-- **Private:** everything runs in the browser. Nothing is sent to a server.
+- **Ask about your pay:** an AI assistant (Google Gemini) that explains your result, such as why PAYE is what it is or what a raise would leave you with. It only explains pay rules and declines financial advice.
+- **Private calculator:** the calculator runs in the browser. Only questions typed into the assistant, with your pay figures, are sent to Gemini.
 
 ## Rates used (2026)
 
@@ -28,7 +29,8 @@ This is an estimate, not tax advice.
 
 ## Built with
 
-Plain HTML, CSS and JavaScript in one file. No framework and no build step.
+- Plain HTML, CSS and JavaScript in one file, with no framework and no build step
+- One Vercel serverless function (`api/chat.js`) that calls the Gemini API, so the API key never reaches the browser
 
 ## Files
 
@@ -36,24 +38,24 @@ Plain HTML, CSS and JavaScript in one file. No framework and no build step.
 |---|---|
 | `index.html` | The whole app |
 | `favicon.svg` | Tab icon |
-| `.nojekyll` | Tells GitHub Pages to serve the files as they are |
+| `api/chat.js` | The assistant: builds the prompt from the user's figures and calls Gemini |
 
 ## Run it locally
 
-Open `index.html` in a browser.
+Open `index.html` in a browser for the calculator. To run the assistant locally, use `vercel dev` with `GEMINI_API_KEY` set.
 
-## Publish with GitHub Pages
+## Deploy on Vercel
 
-1. The repository is named `zambia-take-home-pay`.
-2. Go to **Settings → Pages**.
-3. Under **Build and deployment**, set **Source** to **Deploy from a branch**, choose **main** and **/ (root)**, then click **Save**.
-4. After a minute or two, the site is live at https://roykamwanza.github.io/zambia-take-home-pay/.
+1. Import this repository at [vercel.com/new](https://vercel.com/new) and click **Deploy**. No settings to change.
+2. For the assistant, get a free API key at [Google AI Studio](https://aistudio.google.com), then in Vercel go to **Settings → Environment Variables** and add `GEMINI_API_KEY`.
+3. Optional: add `GEMINI_MODEL` to choose a specific Gemini model.
+4. Redeploy. Every push to `main` deploys automatically.
 
-Every push to `main` updates the site.
+The assistant limits each visitor to 8 messages a minute and 400 characters per message.
 
 ## Updating the rates
 
-All rates are at the top of the `<script>` in `index.html` (`BANDS`, `NAPSA_RATE`, `NAPSA_CEIL`, `NHIMA_RATE`). Change them there and update the "Rates and sources" section.
+All rates are at the top of the `<script>` in `index.html` (`BANDS`, `NAPSA_RATE`, `NAPSA_CEIL`, `NHIMA_RATE`). Change them there and update the "Rates and sources" section and the rules in `api/chat.js`.
 
 ---
 
