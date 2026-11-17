@@ -1,64 +1,72 @@
 # Kwacha Net
 
-A take-home pay calculator for Zambia (2026).
+Kwacha Net is a take-home pay calculator for Zambia. It shows how PAYE, NAPSA and NHIMA are worked out from a salary and explains each result with an AI assistant.
 
-Work out your take-home pay in Zambia: **PAYE, NAPSA and NHIMA, shown band by band.**
+**Live:** https://kwacha-net.vercel.app
 
-**Live site:** https://kwacha-net.vercel.app
+## Features
 
-## What it does
+- **Salary to take-home:** enter a basic salary and allowances to see PAYE, NAPSA, NHIMA and take-home pay.
+- **Take-home to salary:** enter a target take-home and get the basic salary required.
+- **Full breakdown:** PAYE band by band, every step from gross to take-home, and the employer's contributions.
+- **Pay assistant:** answers questions about a result, such as why PAYE is a given amount or what a raise would leave. It explains pay rules only and does not give financial advice.
+- **Monthly and yearly views.**
+- **Shareable results:** every result has its own URL, for example `/?mode=gross&amount=15000&allow=3000&period=m`.
 
-- **Salary → take-home:** enter a basic salary and allowances, and see PAYE, NAPSA, NHIMA and your take-home pay.
-- **Take-home → salary:** enter the take-home you want, and it finds the basic salary you need.
-- **Monthly or yearly** figures.
-- **Shows its working:** a band-by-band PAYE table, every step from gross to take-home, and what the employer pays on top.
-- **Raise insight:** how much of your next K1,000 a month you would actually keep.
-- **Shareable links:** every result has its own URL, e.g. `/?mode=gross&amount=15000&allow=3000&period=m`.
-- **Ask about your pay:** an AI assistant (Google Gemini) that explains your result, such as why PAYE is what it is or what a raise would leave you with. It only explains pay rules and declines financial advice.
-- **Private calculator:** the calculator runs in the browser. Only questions typed into the assistant, with your pay figures, are sent to Gemini.
-
-## Rates used (2026)
+## Rates (2026 tax year)
 
 | Item | Rule |
 |---|---|
 | PAYE (monthly) | 0% up to K5,100 · 20% K5,100–K7,100 · 30% K7,100–K9,200 · 37% above K9,200, on gross pay |
-| NAPSA | 5% employee + 5% employer of gross pay, on earnings up to K37,236 a month (max K1,861.80 each) |
+| NAPSA | 5% employee + 5% employer of gross pay, on earnings up to K37,236 a month (maximum K1,861.80 each) |
 | NHIMA | 1% employee + 1% employer of basic salary |
 
-Sources: [PwC Zambia 2026 Budget Bulletin](https://www.pwc.com/zm/en/assets/pdf/zambia-2026-national-budget-bulletin.pdf) · [PaySpace NAPSA ceiling 2026](https://support.payspace.com/portal/en/kb/articles/zambia-napsa-contribution-ceiling-increase-effective-january-2026) · [NHIMA](https://www.nhima.co.zm/membership/registration-steps) · [ZRA](https://www.zra.org.zm)
+Sources: [PwC Zambia 2026 Budget Bulletin](https://www.pwc.com/zm/en/assets/pdf/zambia-2026-national-budget-bulletin.pdf) · [PaySpace: NAPSA ceiling 2026](https://support.payspace.com/portal/en/kb/articles/zambia-napsa-contribution-ceiling-increase-effective-january-2026) · [NHIMA](https://www.nhima.co.zm/membership/registration-steps) · [Zambia Revenue Authority](https://www.zra.org.zm)
 
-This is an estimate, not tax advice.
+Results are estimates and are not tax advice. They exclude pension top-ups, loans, union dues and special tax credits.
 
-## Built with
+## Tech stack
 
-- Plain HTML, CSS and JavaScript in one file, with no framework and no build step
-- One Vercel serverless function (`api/chat.js`) that calls the Gemini API, so the API key never reaches the browser
+- HTML, CSS and JavaScript in a single page, with no framework or build step
+- A Node.js serverless function on Vercel (`api/chat.js`)
+- Google Gemini API for the pay assistant
 
-## Files
+## Project structure
 
-| Path | What it is |
+| Path | Purpose |
 |---|---|
-| `index.html` | The whole app |
-| `favicon.svg` | Tab icon |
-| `api/chat.js` | The assistant: builds the prompt from the user's figures and calls Gemini |
+| `index.html` | The calculator: layout, styles and logic |
+| `api/chat.js` | Serverless function that builds the assistant's prompt from the user's figures and calls Gemini |
+| `favicon.svg` | Site icon |
 
-## Run it locally
+## Running locally
 
-Open `index.html` in a browser for the calculator. To run the assistant locally, use `vercel dev` with `GEMINI_API_KEY` set.
+Open `index.html` in a browser to use the calculator. To run the assistant as well, use the [Vercel CLI](https://vercel.com/docs/cli):
 
-## Deploy on Vercel
+```bash
+vercel dev
+```
 
-1. Import this repository at [vercel.com/new](https://vercel.com/new) and click **Deploy**. No settings to change.
-2. For the assistant, get a free API key at [Google AI Studio](https://aistudio.google.com), then in Vercel go to **Settings → Environment Variables** and add `GEMINI_API_KEY`.
-3. Optional: add `GEMINI_MODEL` to choose a specific Gemini model.
-4. Redeploy. Every push to `main` deploys automatically.
+with `GEMINI_API_KEY` set in your environment.
 
-The assistant limits each visitor to 8 messages a minute and 400 characters per message.
+## Deployment
+
+1. Import the repository into [Vercel](https://vercel.com/new) and deploy. No build settings are needed.
+2. Add these environment variables under **Settings → Environment Variables**:
+
+| Variable | Required | Description |
+|---|---|---|
+| `GEMINI_API_KEY` | Yes | API key from [Google AI Studio](https://aistudio.google.com) |
+| `GEMINI_MODEL` | No | Overrides the default Gemini model |
+
+3. Redeploy. Every push to `main` deploys automatically.
+
+## Security and privacy
+
+- The Gemini API key is stored on the server and never sent to the browser.
+- The calculator runs entirely in the browser. Only questions typed into the assistant, together with the calculated figures, are sent to Gemini.
+- The assistant allows 8 messages per minute per visitor and 400 characters per message.
 
 ## Updating the rates
 
-All rates are at the top of the `<script>` in `index.html` (`BANDS`, `NAPSA_RATE`, `NAPSA_CEIL`, `NHIMA_RATE`). Change them there and update the "Rates and sources" section and the rules in `api/chat.js`.
-
----
-
-Built by [Roy Kamwanza](https://roykamwanza.github.io) · [LinkedIn](https://www.linkedin.com/in/roy-kamwanza-0550b5244/) · [GitHub](https://github.com/roykamwanza)
+The rates are defined at the top of the `<script>` in `index.html` (`BANDS`, `NAPSA_RATE`, `NAPSA_CEIL`, `NHIMA_RATE`). When they change, also update the **Rates and sources** section of the page and the rules in `api/chat.js`.

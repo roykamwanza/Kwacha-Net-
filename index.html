@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kwacha Net · Take-home pay calculator for Zambia (2026)</title>
 <meta name="description" content="Work out your take-home pay in Zambia for 2026. See PAYE, NAPSA and NHIMA band by band, find the salary you need for a target take-home, and share the result.">
-<meta name="author" content="Roy Kamwanza">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Kwacha Net · What you actually take home">
 <meta property="og:url" content="https://kwacha-net.vercel.app">
@@ -154,7 +153,8 @@ footer a{color:var(--ink-2)}
   .sec-head{grid-template-columns:1fr}
   .sec-head .num{padding:0 0 6px}
   .sec-head p{grid-column:1}
-  .top nav a:not(:last-child){display:none}
+  .top nav{gap:18px}
+  .brand span{display:none}
   .hero{padding:48px 0 32px}
   .section{padding-top:64px}
 }
@@ -172,7 +172,7 @@ footer a{color:var(--ink-2)}
 <div class="wrap">
   <header class="top">
     <a class="brand" href="./"><i></i>kwacha·net <span>2026</span></a>
-    <nav><a href="#breakdown">Breakdown</a><a href="#ask">Assistant</a><a href="#sources">Sources</a><a href="https://roykamwanza.github.io" target="_blank" rel="noopener">Roy Kamwanza ↗</a></nav>
+    <nav><a href="#breakdown">Breakdown</a><a href="#ask">Assistant</a><a href="#sources">Sources</a></nav>
   </header>
 
   <section class="hero">
@@ -312,7 +312,7 @@ footer a{color:var(--ink-2)}
   </section>
 
   <footer>
-    <span>Built by <a href="https://roykamwanza.github.io" target="_blank" rel="noopener">Roy Kamwanza</a> · Lusaka</span>
+    <span>© 2026 Kwacha Net</span>
     <span>The calculator runs in your browser. Only assistant questions are sent to Gemini.</span>
   </footer>
 </div>
