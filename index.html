@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zambia Take-Home Pay Calculator 2026 · PAYE, NAPSA, NHIMA</title>
+<meta name="description" content="Work out your take-home pay in Zambia for 2026. See PAYE, NAPSA and NHIMA band by band, find the salary you need for a target take-home, and share the result.">
+<meta name="author" content="Roy Kamwanza">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Zambia Take-Home Pay Calculator 2026">
+<meta property="og:description" content="PAYE, NAPSA and NHIMA, worked out band by band. Free, private, runs in your browser.">
+<meta name="theme-color" content="#0E100E">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ink:#ECEDE8; --ink-2:#A8ACA3; --ink-3:#73776F;
+  --bg:#0E100E; --card:#161916; --line:#262A25; --soft:#1E221D;
+  --green:#C6F432; --green-soft:#1A1F17;
+  --mal:#C6F432;
+  --paye:#ECEDE8; --napsa:#F08A4B; --nhima:#5E645A; --net:#C6F432;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sans:"Manrope",system-ui,sans-serif;
+  --display:"Bricolage Grotesque","Manrope",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55}
+a{color:var(--green);text-decoration-color:rgba(198,244,50,.35);text-underline-offset:3px}
+::selection{background:var(--green);color:#0E100E}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.brand{font-family:var(--mono);font-size:13px;color:var(--ink-2);text-decoration:none;display:flex;gap:8px;align-items:center}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--green) 50%,var(--mal) 50%)}
+.top nav a{font-size:14px;color:var(--ink-2);text-decoration:none;margin-left:18px}
+.top nav a:hover{color:var(--ink)}
+.hero{padding:28px 0 22px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+h1 em{font-style:normal;color:inherit}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,58px);line-height:1.02;letter-spacing:-.02em;margin:10px 0 14px}
+.lede{max-width:620px;color:var(--ink-2);font-size:17px;margin:0}
+
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px;align-items:start;padding:18px 0 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;font:600 14px var(--sans);color:var(--ink-2);padding:9px 10px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:#2C312B;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.4)}
+.seg button:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.field{margin-top:18px}
+.field label{display:flex;justify-content:space-between;font-weight:600;font-size:14px;margin-bottom:6px}
+.field label small{font-weight:500;color:var(--ink-3)}
+.money{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:#0B0D0B;transition:border-color .15s}
+.money:focus-within{border-color:var(--green)}
+.money span{font-family:var(--mono);color:var(--ink-3);padding:0 4px 0 14px}
+.money input{caret-color:var(--green);flex:1;min-width:0;border:0;background:transparent;font:500 22px var(--mono);color:var(--ink);padding:12px 14px 12px 4px;outline:none}
+.hint{font-size:13px;color:var(--ink-3);margin:6px 0 0}
+.row2{display:flex;gap:10px;margin-top:18px}
+.row2 .seg{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{border:1px solid var(--line);background:transparent;border-radius:99px;padding:5px 11px;font:500 13px var(--mono);color:var(--ink-2);cursor:pointer}
+.chip:hover{border-color:var(--ink-3);color:var(--ink)}
+
+.card.result{border-top:2px solid var(--mal)}
+.result .label{font-size:14px;color:var(--ink-2);font-weight:600}
+.big{color:var(--mal);font-family:var(--display);font-weight:700;font-size:clamp(40px,7vw,64px);letter-spacing:-.02em;line-height:1.05;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.sub{color:var(--ink-2);font-size:15px}
+.sub b{color:var(--ink)}
+.bar{display:flex;height:16px;border-radius:99px;overflow:hidden;margin:20px 0 12px;background:var(--soft)}
+.bar i{display:block;height:100%;transition:width .35s ease}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+.lg{display:flex;align-items:center;gap:8px;font-size:14px}
+.lg .sw{width:10px;height:10px;border-radius:3px;flex:none}
+.lg .v{margin-left:auto;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.lg .p{color:var(--ink-3);font-family:var(--mono);font-size:12px;width:44px;text-align:right}
+.insight{margin-top:18px;background:var(--green-soft);border-radius:12px;padding:14px 16px;font-size:15px}
+.insight{border:1px solid var(--line);border-left:3px solid var(--green)}
+.insight b{font-family:var(--mono);font-weight:500}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{border:1px solid var(--mal);background:var(--mal);color:#0E100E;font:600 14px var(--sans);padding:10px 16px;border-radius:10px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink-3)}
+
+h2{font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:-.01em;margin:0 0 6px}
+.section{padding:12px 0 36px}
+.section > p.intro{color:var(--ink-2);margin:0 0 18px;max-width:640px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:600;color:var(--ink-3);font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:0 0 8px;border-bottom:1px solid var(--line)}
+td{padding:10px 0;border-bottom:1px solid var(--soft);vertical-align:top}
+td+td,th+th{padding-left:14px}
+td.n,th.n{text-align:right;white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tr.total td{border-bottom:0;font-weight:700;padding-top:12px}
+tr.dim td{color:var(--ink-3)}
+.bandbar{height:6px;background:var(--soft);border-radius:99px;margin-top:6px;overflow:hidden;max-width:180px}
+.bandbar i{display:block;height:100%;background:var(--ink-2)}
+.card h3{font-size:16px;margin:0 0 12px}
+.note{font-size:13px;color:var(--ink-3);margin:12px 0 0}
+.sources li{margin-bottom:8px}
+.sources{padding-left:18px;margin:0}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:14px;color:var(--ink-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--green);color:#0E100E;font-weight:600;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media (max-width:820px){
+  .grid,.cols{grid-template-columns:1fr}
+  .top nav a:not(:last-child){display:none}
+}
+@media (max-width:420px){
+  .legend{grid-template-columns:1fr}
+  table{font-size:13px}
+  .paye th:nth-child(3),.paye td:nth-child(3){display:none}
+  .card{padding:18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./"><span class="dot"></span>zm-pay / 2026</a>
+    <nav><a href="#working">How it's worked out</a><a href="#sources">Sources</a><a href="https://roykamwanza.github.io" target="_blank" rel="noopener">By Roy</a></nav>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Zambia · 2026 tax year</div>
+    <h1>What you <em>actually</em><br>take home.</h1>
+    <p class="lede">Enter a salary to see PAYE, NAPSA and NHIMA worked out band by band. Or start from the take-home you want and find the salary you need.</p>
+  </section>
+
+  <main class="grid">
+    <!-- Inputs -->
+    <section class="card" aria-label="Your pay">
+      <div class="seg" role="group" aria-label="Calculation mode">
+        <button type="button" data-mode="gross" aria-pressed="true">I know my salary</button>
+        <button type="button" data-mode="net" aria-pressed="false">I want a take-home</button>
+      </div>
+
+      <div class="field" id="f-main">
+        <label for="main"><span id="main-label">Basic salary</span><small id="main-per">per month</small></label>
+        <div class="money"><span>K</span><input id="main" inputmode="decimal" autocomplete="off" value="10,000"></div>
+        <div class="chips" id="chips"></div>
+      </div>
+
+      <div class="field">
+        <label for="allow"><span>Allowances</span><small>housing, transport, other</small></label>
+        <div class="money"><span>K</span><input id="allow" inputmode="decimal" autocomplete="off" value="0"></div>
+        <p class="hint">Allowances count towards PAYE and NAPSA. NHIMA is charged on basic salary only.</p>
+      </div>
+
+      <div class="row2">
+        <div class="seg" role="group" aria-label="Period">
+          <button type="button" data-period="m" aria-pressed="true">Monthly</button>
+          <button type="button" data-period="y" aria-pressed="false">Yearly</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section class="card result" aria-live="polite">
+      <div class="label" id="res-label">Your take-home pay</div>
+      <div class="big" id="res-big">K0.00</div>
+      <div class="sub" id="res-sub"></div>
+
+      <div class="bar" id="bar" role="img" aria-label="Breakdown of gross pay"></div>
+      <div class="legend" id="legend"></div>
+
+      <div class="insight" id="insight"></div>
+
+      <div class="actions">
+        <button class="btn" id="share" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+          Copy link to this result
+        </button>
+        <button class="btn ghost" id="reset" type="button">Reset</button>
+      </div>
+    </section>
+  </main>
+
+  <section class="section" id="working">
+    <h2>How it's worked out</h2>
+    <p class="intro">Every number above comes from the steps below. Change the salary and they update.</p>
+    <div class="cols">
+      <div class="card">
+        <h3>PAYE, band by band</h3>
+        <table class="paye">
+          <thead><tr><th>Band (<span class="per-word">monthly</span>)</th><th class="n">Rate</th><th class="n">Taxed</th><th class="n">Tax</th></tr></thead>
+          <tbody id="paye-rows"></tbody>
+        </table>
+        <p class="note">PAYE is charged on gross pay (basic plus allowances). Only the part of your pay inside each band is taxed at that band's rate.</p>
+      </div>
+      <div class="card">
+        <h3>From gross to take-home</h3>
+        <table><tbody id="steps"></tbody></table>
+        <h3 style="margin-top:22px">What your employer also pays</h3>
+        <table><tbody id="employer"></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sources">
+    <h2>Rates and sources</h2>
+    <p class="intro">Rates checked on 17 November 2026. They apply to employees on a regular monthly salary.</p>
+    <div class="cols">
+      <div class="card">
+        <table>
+          <thead><tr><th>Item</th><th>Rule used</th></tr></thead>
+          <tbody>
+            <tr><td>PAYE</td><td>0% up to K5,100 · 20% to K7,100 · 30% to K9,200 · 37% above (monthly). Unchanged in the 2026 budget.</td></tr>
+            <tr><td>NAPSA</td><td>5% employee + 5% employer of gross pay, on earnings up to K37,236 a month (max K1,861.80 each), from 1 January 2026.</td></tr>
+            <tr><td>NHIMA</td><td>1% employee + 1% employer of basic salary.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <ol class="sources">
+          <li><a href="https://www.pwc.com/zm/en/assets/pdf/zambia-2026-national-budget-bulletin.pdf" target="_blank" rel="noopener">PwC Zambia, 2026 National Budget Bulletin</a>: PAYE regime kept, annual bands K61,200 / K85,200 / K110,400.</li>
+          <li><a href="https://support.payspace.com/portal/en/kb/articles/zambia-napsa-contribution-ceiling-increase-effective-january-2026" target="_blank" rel="noopener">PaySpace, NAPSA ceiling from January 2026</a>.</li>
+          <li><a href="https://www.nhima.co.zm/membership/registration-steps" target="_blank" rel="noopener">NHIMA, membership and contributions</a>: 1% of basic salary.</li>
+          <li><a href="https://www.zra.org.zm" target="_blank" rel="noopener">Zambia Revenue Authority</a> for official PAYE guidance.</li>
+        </ol>
+        <p class="note">This is an estimate, not tax advice. It leaves out pension top-ups, loans, union dues, tax credits for persons with disabilities and other special cases. Your payslip is the final word.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Built by <a href="https://roykamwanza.github.io" target="_blank" rel="noopener">Roy Kamwanza</a> · Lusaka</span>
+    <span>Runs in your browser. Nothing you type is sent anywhere.</span>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  // ---- 2026 rules (monthly) ----
+  var BANDS = [
+    { from: 0,    to: 5100,     rate: 0 },
+    { from: 5100, to: 7100,     rate: 0.20 },
+    { from: 7100, to: 9200,     rate: 0.30 },
+    { from: 9200, to: Infinity, rate: 0.37 }
+  ];
+  var NAPSA_RATE = 0.05, NAPSA_CEIL = 37236, NHIMA_RATE = 0.01;
+
+  function calc(basic, allow) {
+    var gross = basic + allow;
+    var bands = BANDS.map(function (b) {
+      var taxed = Math.max(0, Math.min(gross, b.to) - b.from);
+      return { from: b.from, to: b.to, rate: b.rate, taxed: taxed, tax: taxed * b.rate };
+    });
+    var paye = bands.reduce(function (s, b) { return s + b.tax; }, 0);
+    var napsaBase = Math.min(gross, NAPSA_CEIL);
+    var napsa = napsaBase * NAPSA_RATE;
+    var nhima = basic * NHIMA_RATE;
+    var net = gross - paye - napsa - nhima;
+    return { basic: basic, allow: allow, gross: gross, bands: bands, paye: paye,
+             napsa: napsa, napsaBase: napsaBase, nhima: nhima, net: net,
+             capped: gross > NAPSA_CEIL };
+  }
+
+  // Find the basic salary that gives a target take-home (allowances fixed).
+  function solveBasic(targetNet, allow) {
+    if (calc(0, allow).net >= targetNet) return 0;
+    var lo = 0, hi = Math.max(1000, targetNet * 3);
+    while (calc(hi, allow).net < targetNet) hi *= 2;
+    for (var i = 0; i < 80; i++) {
+      var mid = (lo + hi) / 2;
+      if (calc(mid, allow).net < targetNet) lo = mid; else hi = mid;
+    }
+    return Math.round(hi * 100) / 100;
+  }
+
+  // ---- state ----
+  var DEFAULT = { mode: "gross", period: "m", main: 10000, allow: 0 };
+  var state = Object.assign({}, DEFAULT);
+
+  var $ = function (id) { return document.getElementById(id); };
+  var mainIn = $("main"), allowIn = $("allow");
+
+  function fmt(n, dp) {
+    dp = dp === undefined ? 2 : dp;
+    return "K" + n.toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  }
+  function fmtInput(n) {
+    return n.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  }
+  function parse(v) {
+    var n = parseFloat(String(v).replace(/[^0-9.]/g, ""));
+    return isFinite(n) && n >= 0 ? Math.min(n, 1e9) : 0;
+  }
+  function pct(part, whole) { return whole > 0 ? (part / whole * 100) : 0; }
+
+  // ---- url <-> state ----
+  function readURL() {
+    var q = new URLSearchParams(location.search);
+    if (q.get("mode") === "net" || q.get("mode") === "gross") state.mode = q.get("mode");
+    if (q.get("period") === "y" || q.get("period") === "m") state.period = q.get("period");
+    if (q.has("amount")) state.main = parse(q.get("amount"));
+    if (q.has("allow")) state.allow = parse(q.get("allow"));
+  }
+  function shareURL() {
+    var q = new URLSearchParams({ mode: state.mode, amount: state.main, allow: state.allow, period: state.period });
+    return location.origin + location.pathname + "?" + q.toString();
+  }
+
+  // ---- render ----
+  function render() {
+    var k = state.period === "y" ? 12 : 1;          // display multiplier
+    var perWord = state.period === "y" ? "per year" : "per month";
+    var allowM = state.allow / k;
+    var mainM = state.main / k;
+    var basicM = state.mode === "gross" ? mainM : solveBasic(mainM, allowM);
+    var r = calc(basicM, allowM);
+
+    document.querySelectorAll("[data-mode]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.mode === state.mode); });
+    document.querySelectorAll("[data-period]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.period === state.period); });
+    $("main-label").textContent = state.mode === "gross" ? "Basic salary" : "Take-home you want";
+    $("main-per").textContent = perWord;
+    document.querySelectorAll(".per-word").forEach(function (e) { e.textContent = state.period === "y" ? "yearly" : "monthly"; });
+
+    // chips
+    var chipVals = state.mode === "gross" ? [5000, 8000, 12000, 20000, 40000] : [5000, 7500, 10000, 15000, 25000];
+    $("chips").innerHTML = chipVals.map(function (v) {
+      var shown = v * k;
+      return '<button type="button" class="chip" data-v="' + shown + '">' + fmt(shown, 0) + "</button>";
+    }).join("");
+
+    // headline
+    if (state.mode === "gross") {
+      $("res-label").textContent = "Your take-home pay";
+      $("res-big").textContent = fmt(r.net * k);
+      $("res-sub").innerHTML = "<b>" + fmt(r.gross * k) + "</b> gross " + perWord + " · you keep <b>" + pct(r.net, r.gross).toFixed(1) + "%</b>";
+    } else {
+      $("res-label").textContent = "Basic salary you need";
+      $("res-big").textContent = fmt(r.basic * k);
+      $("res-sub").innerHTML = "Gross <b>" + fmt(r.gross * k) + "</b> " + perWord + " gives a take-home of <b>" + fmt(r.net * k) + "</b>";
+    }
+
+    // bar + legend
+    var parts = [
+      { name: "Take-home", v: r.net,   c: "var(--net)" },
+      { name: "PAYE",      v: r.paye,  c: "var(--paye)" },
+      { name: "NAPSA",     v: r.napsa, c: "var(--napsa)" },
+      { name: "NHIMA",     v: r.nhima, c: "var(--nhima)" }
+    ];
+    $("bar").innerHTML = parts.map(function (p) {
+      return '<i style="width:' + pct(p.v, r.gross) + "%;background:" + p.c + '" title="' + p.name + '"></i>';
+    }).join("");
+    $("bar").setAttribute("aria-label", parts.map(function (p) { return p.name + " " + pct(p.v, r.gross).toFixed(1) + "%"; }).join(", "));
+    $("legend").innerHTML = parts.map(function (p) {
+      return '<div class="lg"><span class="sw" style="background:' + p.c + '"></span>' + p.name +
+             '<span class="v">' + fmt(p.v * k) + '</span><span class="p">' + pct(p.v, r.gross).toFixed(1) + "%</span></div>";
+    }).join("");
+
+    // marginal insight: what happens to the next K1,000 a month
+    var step = 1000;
+    var next = calc(r.basic + step, r.allow);
+    var keep = next.net - r.net;
+    var band = BANDS.filter(function (b) { return r.gross >= b.from; }).pop();
+    var line;
+    if (r.gross <= 5100) {
+      line = "You're in the tax-free band. Up to <b>K5,100</b> a month carries no PAYE.";
+      if (r.gross > 0) line += " A raise of <b>K1,000</b> would leave you <b>" + fmt(keep) + "</b> better off each month.";
+    } else {
+      line = "Your top PAYE rate is <b>" + Math.round(band.rate * 100) + "%</b>. Of your next <b>K1,000</b> raise a month, you'd keep <b>" + fmt(keep) + "</b>.";
+    }
+    if (r.capped) line += " Your NAPSA has hit the K1,861.80 monthly cap.";
+    $("insight").innerHTML = line;
+
+    // PAYE table
+    var maxTaxed = Math.max.apply(null, r.bands.map(function (b) { return b.taxed; }).concat([1]));
+    $("paye-rows").innerHTML = r.bands.map(function (b) {
+      var lab = b.to === Infinity ? "Above " + fmt(b.from * k, 0) : fmt(b.from * k, 0) + " – " + fmt(b.to * k, 0);
+      return '<tr class="' + (b.taxed ? "" : "dim") + '"><td>' + lab +
+             '<div class="bandbar"><i style="width:' + pct(b.taxed, maxTaxed) + '%"></i></div></td>' +
+             '<td class="n">' + Math.round(b.rate * 100) + '%</td><td class="n">' + fmt(b.taxed * k) +
+             '</td><td class="n">' + fmt(b.tax * k) + "</td></tr>";
+    }).join("") + '<tr class="total"><td>Total PAYE</td><td></td><td class="n">' + fmt(r.gross * k) + '</td><td class="n">' + fmt(r.paye * k) + "</td></tr>";
+
+    // steps
+    var rows = [
+      ["Basic salary", r.basic],
+      ["+ Allowances", r.allow],
+      ["= Gross pay", r.gross, "b"],
+      ["− PAYE", r.paye],
+      ["− NAPSA (5% of " + fmt(r.napsaBase * k, 0) + (r.capped ? ", capped" : "") + ")", r.napsa],
+      ["− NHIMA (1% of basic)", r.nhima],
+      ["= Take-home", r.net, "t"]
+    ];
+    $("steps").innerHTML = rows.map(function (x) {
+      return '<tr class="' + (x[2] === "t" ? "total" : "") + '"><td' + (x[2] === "b" ? ' style="font-weight:700"' : "") + ">" + x[0] +
+             '</td><td class="n"' + (x[2] === "b" ? ' style="font-weight:700"' : "") + ">" + fmt(x[1] * k) + "</td></tr>";
+    }).join("");
+    var er = [["NAPSA (5%)", r.napsa], ["NHIMA (1% of basic)", r.nhima], ["Total cost of employing you", r.gross + r.napsa + r.nhima, "t"]];
+    $("employer").innerHTML = er.map(function (x) {
+      return '<tr class="' + (x[2] ? "total" : "") + '"><td>' + x[0] + '</td><td class="n">' + fmt(x[1] * k) + "</td></tr>";
+    }).join("");
+
+    history.replaceState(null, "", shareURL());
+  }
+
+  // ---- events ----
+  function syncInputs() { mainIn.value = fmtInput(state.main); allowIn.value = fmtInput(state.allow); }
+
+  mainIn.addEventListener("input", function () { state.main = parse(mainIn.value); render(); });
+  allowIn.addEventListener("input", function () { state.allow = parse(allowIn.value); render(); });
+  [mainIn, allowIn].forEach(function (el) {
+    el.addEventListener("blur", function () { el.value = fmtInput(parse(el.value)); });
+    el.addEventListener("focus", function () { setTimeout(function () { el.select(); }, 0); });
+  });
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("button");
+    if (!t) return;
+    if (t.dataset.mode && t.dataset.mode !== state.mode) {
+      // keep the same situation when switching: carry the current result across
+      var k = state.period === "y" ? 12 : 1;
+      var allowM = state.allow / k, mainM = state.main / k;
+      var r = state.mode === "gross" ? calc(mainM, allowM) : calc(solveBasic(mainM, allowM), allowM);
+      state.main = Math.round((t.dataset.mode === "net" ? r.net : r.basic) * k * 100) / 100;
+      state.mode = t.dataset.mode; syncInputs(); render();
+    } else if (t.dataset.period && t.dataset.period !== state.period) {
+      var f = t.dataset.period === "y" ? 12 : 1 / 12;
+      state.main = Math.round(state.main * f * 100) / 100;
+      state.allow = Math.round(state.allow * f * 100) / 100;
+      state.period = t.dataset.period; syncInputs(); render();
+    } else if (t.classList.contains("chip")) {
+      state.main = parseFloat(t.dataset.v); syncInputs(); render();
+    } else if (t.id === "reset") {
+      state = Object.assign({}, DEFAULT); syncInputs(); render();
+    } else if (t.id === "share") {
+      copy(shareURL());
+    }
+  });
+
+  function toast(msg) {
+    var el = $("toast"); el.textContent = msg; el.classList.add("show");
+    clearTimeout(toast.t); toast.t = setTimeout(function () { el.classList.remove("show"); }, 2000);
+  }
+  function copy(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { toast("Link copied"); }, fallback);
+    } else fallback();
+    function fallback() {
+      var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+      ta.select(); try { document.execCommand("copy"); toast("Link copied"); } catch (e) { toast("Copy this link from the address bar"); }
+      ta.remove();
+    }
+  }
+
+  readURL(); syncInputs(); render();
+})();
+</script>
+</body>
+</html>
