@@ -1,8 +1,10 @@
-# Zambia Take-Home Pay Calculator (2026)
+# Kwacha Net
+
+A take-home pay calculator for Zambia (2026).
 
 Work out your take-home pay in Zambia: **PAYE, NAPSA and NHIMA, shown band by band.**
 
-**Live site:** https://zambia-take-home-pay.vercel.app
+**Live site:** https://kwacha-net.vercel.app
 
 ## What it does
 
