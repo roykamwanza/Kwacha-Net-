@@ -21,7 +21,12 @@ Kwacha Net is a take-home pay calculator for Zambia. It shows how PAYE, NAPSA an
 | NAPSA | 5% employee + 5% employer of gross pay, on earnings up to K37,236 a month (maximum K1,861.80 each) |
 | NHIMA | 1% employee + 1% employer of basic salary |
 
-Sources: [PwC Zambia 2026 Budget Bulletin](https://www.pwc.com/zm/en/assets/pdf/zambia-2026-national-budget-bulletin.pdf) · [PaySpace: NAPSA ceiling 2026](https://support.payspace.com/portal/en/kb/articles/zambia-napsa-contribution-ceiling-increase-effective-january-2026) · [NHIMA](https://www.nhima.co.zm/membership/registration-steps) · [Zambia Revenue Authority](https://www.zra.org.zm)
+Official sources:
+
+- [Zambia Revenue Authority: PAYE bands and rates](https://www.zra.org.zm/paye-calculator/)
+- [NAPSA: 2026 contribution ceiling](https://www.napsa.co.zm/self-service/calculators)
+- [NAPSA: formal sector contributions](https://www.napsa.co.zm/self-service/formal-sector)
+- [National Health Insurance (General) Regulations, SI No. 63 of 2019](https://nhima.co.zm/download/document/813df761802019102159cc9cc7.pdf)
 
 Results are estimates and are not tax advice. They exclude pension top-ups, loans, union dues and special tax credits.
 
